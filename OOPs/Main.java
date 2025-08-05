@@ -36,6 +36,19 @@ class Car{
     public void returnCar(){
         isAvailable = true;
     }
+
+    public boolean isAvailable(){
+        return isAvailable;
+    }   
+
+    public void rent() {
+        if (isAvailable) {
+            isAvailable = false; // Mark the car as rented
+        } else {
+            System.out.println("Car is not available for rent.");
+        }
+    }
+
 }
 
 class Customer{
@@ -80,5 +93,23 @@ class Rental{
 }
 
 class CarRentalSystem{
-    
+    private List<Car> cars;
+    private List<Customer> customers;
+    private List<Rental> rentals;
+
+    public void addCar(Car car){
+        cars.add(car);
+    }
+
+    public void addCustomer(Customer customer){
+        customers.add(customer);
+    }
+    public void rentCar(Car car, Customer customer, int rentalDays){
+        if(car.isAvailable()){
+            car.rent();
+            rentals.add(new Rental(car,customer,rentalDays));
+        } else{
+            System.out.println("Car is not available for rent.");
+        }
+    }
 }
