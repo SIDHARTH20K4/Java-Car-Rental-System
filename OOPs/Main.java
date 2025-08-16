@@ -154,27 +154,83 @@ class CarRentalSystem{
                         System.out.println("Car ID: " + car.getCarID() + ", Brand: " + car.getBrand() + ", Model: " + car.getModel() + ", Base Price per Day: " + car.calculatePrice(1));
                     }
                 }
+
+                System.out.print("Enter Car ID to rent: ");
+                String carId = sc.nextLine();       
+
+                System.out.print("Enter rental days: ");
+                int rentalDays = sc.nextInt();
+                sc.nextLine(); // Consume newline character
+
+                Customer newCustomer = new Customer("Cus" + (customers.size() + 1), customerName);
+                addCustomer(newCustomer);
+
+                Car selectedCar = null;
+                for(Car car: cars){
+                    if(car.getCarID().equals(carId) && car.isAvailable())){
+                        selectedCar = car;
+                        break;
+                    }
+                }
+
+                if(selectedCar != null){
+                    double totalPrice = selectedCar.calculatePrice(rentalDays);
+                    System.out.println("=== Rental Summary ===");
+                    System.out.println("Customer Name: " + newCustomer.getCustomerName());
+                    System.out.println("Car ID: " + selectedCar.getCarID());    
+                    System.out.println("Brand: " + selectedCar.getBrand());
+                    System.out.println("Model: " + selectedCar.getModel());
+                    System.out.println("Rental Days: " + rentalDays);
+                    System.out.println("Total Price: " + totalPrice);
+                    System.out.println("\n Confirm rental? (yes/no)");
+                    String confirm = sc.nextLine();
+
+                    if(!confirm.equalsIgnoreCase("yes")){
+                        System.out.println("Rental cancelled.");
+                        continue;
+                    }else{
+                        rentCar(selectedCar, newCustomer, rentalDays);
+                        System.out.println("Rental confirmed.");
+                    }
+                } else {
+                    System.out.println("Car not found or not available.");
+                }
             }
 
-            if(choice == 2){
-                System.out.print("\n === Return a Car === \n");
-                System.out.println("Enter Car ID to return: ");
+            else if(choice == 2){
+                System.out.print("Enter Car ID to return: ");
                 String carId = sc.nextLine();
-                Car carToReturn = null;
 
-                for(Car car : cars) {
-                    if(car.getCarID().equals(carId)) {
+                Car carToReturn = null;
+                for(Car car: cars){
+                    if(car.getCarID().equals(carId)){
                         carToReturn = car;
                         break;
                     }
                 }
 
-                if(carToReturn != null) {
+                if(carToReturn != null){
                     returnCar(carToReturn);
                 } else {
-                    System.out.println("Car with ID " + carId + " not found.");
+                    System.out.println("Car not found.");
                 }
-            }
+            } else if(choice == 3){
+                System.out.println("Exiting the system.");
+                break;
+            } else {
+                System.out.println("Invalid choice. Please try again.");
+            }  
         }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        CarRentalSystem carRentalSystem = new CarRentalSystem();
+        carRentalSystem.addCar(new Car("C001", "Toyota", "Camry", 50.0));
+        carRentalSystem.addCar(new Car("C002", "Honda", "Civic", 45.0));
+        carRentalSystem.addCar(new Car("C003", "Ford", "Focus", 40.0));
+
+        carRentalSystem.menu();
     }
 }
