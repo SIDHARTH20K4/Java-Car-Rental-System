@@ -112,4 +112,69 @@ class CarRentalSystem{
             System.out.println("Car is not available for rent.");
         }
     }
+
+    public void returnCar(Car car){
+        Rental rentalToRemove = null; 
+        for(Rental rental : rentals) {
+            if(rental.getCar() == car){
+                rentalToRemove = rental;
+                break;
+            }
+        }
+        if(rentalToRemove != null){
+            rentals.remove(rentalToRemove);
+            car.returnCar();
+            System.out.println("Car returned successfully");
+        } else{
+            System.out.println("Car was not rented from this system.");
+        }
+    }
+
+    public void menu(){
+        Scanner sc = new Scanner(System.in);
+
+        while(true){
+            System.out.println("==== Car Rental System ====");
+            System.out.println("1. Add Car");
+            System.out.println("2. Return Car");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine(); // Consume newline character
+
+            if(choice == 1){
+                System.out.print("\n === Rent a Car === \n");
+                System.out.println("Enter your name: ");
+                String customerName = sc.nextLine();
+
+                System.out.println("\n Available cars: ");
+                for(Car car: cars){
+                    if(car.isAvailable()){
+                        System.out.println("Car ID: " + car.getCarID() + ", Brand: " + car.getBrand() + ", Model: " + car.getModel() + ", Base Price per Day: " + car.calculatePrice(1));
+                    }
+                }
+            }
+
+            if(choice == 2){
+                System.out.print("\n === Return a Car === \n");
+                System.out.println("Enter Car ID to return: ");
+                String carId = sc.nextLine();
+                Car carToReturn = null;
+
+                for(Car car : cars) {
+                    if(car.getCarID().equals(carId)) {
+                        carToReturn = car;
+                        break;
+                    }
+                }
+
+                if(carToReturn != null) {
+                    returnCar(carToReturn);
+                } else {
+                    System.out.println("Car with ID " + carId + " not found.");
+                }
+            }
+        }
+    }
 }
