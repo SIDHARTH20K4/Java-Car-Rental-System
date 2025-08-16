@@ -97,6 +97,12 @@ class CarRentalSystem{
     private List<Customer> customers;
     private List<Rental> rentals;
 
+    public CarRentalSystem() {
+        cars = new ArrayList<>();
+        customers = new ArrayList<>();
+        rentals = new ArrayList<>();
+    }
+
     public void addCar(Car car){
         cars.add(car);
     }
@@ -167,7 +173,7 @@ class CarRentalSystem{
 
                 Car selectedCar = null;
                 for(Car car: cars){
-                    if(car.getCarID().equals(carId) && car.isAvailable())){
+                    if(car.getCarID().equals(carId) && car.isAvailable()){
                         selectedCar = car;
                         break;
                     }
